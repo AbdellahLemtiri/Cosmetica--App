@@ -12,7 +12,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,9 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             //
+
+            'total_price' => 'required',
+            'user_id' => 'required'
         ];
     }
 }

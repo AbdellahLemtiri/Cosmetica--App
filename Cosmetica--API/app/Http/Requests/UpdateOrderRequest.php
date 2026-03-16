@@ -12,7 +12,7 @@ class UpdateOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             //
+            'status' => 'required|in:pending,preparing,delivered',
         ];
     }
 }
