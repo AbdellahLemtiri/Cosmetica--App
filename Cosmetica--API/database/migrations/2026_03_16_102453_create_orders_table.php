@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('total_price', 8, 2);
             $table->enum('status', ['pending', 'preparing', 'delivered'])->default('pending');
+            $table->foreignId('user_id')->nullable()->index();
             $table->timestamps();
         });
     }

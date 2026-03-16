@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-
+use Symfony\Component\HttpFoundation\Request;
+use App\Http\Requests\UpdateStatusOrder;
 class OrderController extends Controller
 {
     /**
@@ -35,6 +36,15 @@ class OrderController extends Controller
         $data = $request->validated()   ;
         $order = Order::create($data);
         return response()->json($order);
+    }
+
+
+    public function UpdateStatus(UpdateStatusOrder $request, Order $order)
+    {
+        //
+        $status = $request->validated('status');
+        $order->status = $status;
+        return response()->json($order);        
     }
 
     /**
