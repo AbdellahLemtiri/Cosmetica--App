@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisteRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -14,7 +15,10 @@ class AuthController extends Controller
     {
 
         $data = $request->validated();
+        $clientRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
         $user = User::create($data);
+        $user->assignRole($clientRole) ;
+        $user->save();
         $token = Auth::guard('api')->login($user);
         return response()->json([
             'user' => $user,
