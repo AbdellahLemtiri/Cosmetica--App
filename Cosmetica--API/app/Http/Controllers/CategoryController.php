@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 class CategoryController extends Controller
 {
@@ -31,10 +33,10 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         //
-        Gate::authorize('create');
-         $data = $request->validated()   ;
+          $data = $request->validated()   ;
         $category = Category::create($data);
-        return response()->json($category);
+        $user = Auth::User();
+        return response()->json([$category, $user]);
 
 
     }
