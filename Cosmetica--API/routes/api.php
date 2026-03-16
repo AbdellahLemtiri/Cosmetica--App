@@ -28,7 +28,7 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('/employee/orders/{id}/status', [OrderController::class, 'updateStatus']);
     });
 
-    Route::middleware('role:api')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::put('/categories/{id}', [CategoryController::class, 'update']);
         Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);

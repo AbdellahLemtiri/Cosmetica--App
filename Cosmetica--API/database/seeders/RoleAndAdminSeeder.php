@@ -11,7 +11,7 @@ class RoleAndAdminSeeder extends Seeder
 {
     public function run(): void
     {
-         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
         $employeeRole = Role::firstOrCreate(['name' => 'employee', 'guard_name' => 'api']);
         $clientRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
 

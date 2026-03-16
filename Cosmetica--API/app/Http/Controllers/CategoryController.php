@@ -32,7 +32,7 @@ class CategoryController extends Controller
     {
         //
         Gate::authorize('create');
-        $data = $request->validated()   ;
+         $data = $request->validated()   ;
         $category = Category::create($data);
         return response()->json($category);
 
