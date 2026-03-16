@@ -12,7 +12,7 @@ class StoreCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,9 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             //
+
+            'name' => 'required|min:3|max:50',
+            'description' => 'required|min:3|max:255',
         ];
     }
 }
