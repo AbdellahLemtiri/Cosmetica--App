@@ -36,7 +36,6 @@ class ProductController extends Controller
         //
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
-        
         $product = Product::create($data);
         return response()->json($product);
     }
