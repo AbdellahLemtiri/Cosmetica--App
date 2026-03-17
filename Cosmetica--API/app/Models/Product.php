@@ -16,7 +16,7 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'category_id',
+        'category_id','quantity',
     ];
 
     public function category()
@@ -37,9 +37,7 @@ class Product extends Model
 
    public function getSlugOptions() : SlugOptions
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name') // Y-akhod le slug mn le 'name'
-            ->saveSlugsTo('slug');      // Y-savyh f le champ 'slug'
+        return SlugOptions::create()->generateSlugsFrom('name')->saveSlugsTo('slug');      
     }
 
      

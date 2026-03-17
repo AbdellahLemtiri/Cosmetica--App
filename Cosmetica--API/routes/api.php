@@ -34,7 +34,7 @@ Route::middleware('auth:api')->group(function () {
          Route::get('/categories/{category}', [CategoryController::class, 'show']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
          Route::post('/products', [ProductController::class, 'store']);
-        Route::put('/products/{id}', [ProductController::class, 'update']);
+        Route::put('/products/{product}', [ProductController::class, 'update']);
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
         Route::get('/admin/stats', [OrderController::class, 'stats']);
     });
