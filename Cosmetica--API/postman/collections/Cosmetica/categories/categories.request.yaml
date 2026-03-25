@@ -1,0 +1,17 @@
+$kind: http-request
+name: categories
+url: http://127.0.0.1:8000/api/categories
+method: POST
+headers:
+  Authorization: "{{tokenJWT}}"
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"parfums\",\r
+
+    \    \"description\": \"Une large gamme de parfums de luxe pour hommes et
+    femmes.\"\r
+
+    }"
+order: 1000

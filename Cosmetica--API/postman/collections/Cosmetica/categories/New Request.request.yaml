@@ -1,0 +1,7 @@
+$kind: http-request
+name: New Request
+url: http://127.0.0.1:8000/api/categories/1
+method: DELETE
+headers:
+  Authorization: "{{tokenJWT}}"
+order: 2576275414424084

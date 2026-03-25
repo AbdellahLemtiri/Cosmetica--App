@@ -1,0 +1,52 @@
+$kind: http-request
+name: update product
+url: http://127.0.0.1:8000/api/products/parfum-dior-sauvage-1
+method: PUT
+headers:
+  Authorization: "{{tokenJWT}}"
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: Parfum Dior Sauvage
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: Parfum élégant et intense pour homme
+      description: ""
+      disabled: false
+    - type: text
+      key: stock
+      value: "1"
+      description: ""
+      disabled: false
+    - type: text
+      key: category_id
+      value: "2"
+      description: ""
+      disabled: false
+    - type: text
+      key: price
+      value: "100"
+      description: ""
+      disabled: false
+    - type: file
+      key: images[0]
+      src:
+        - /C:/Users/youco/Downloads/IMG_6445.png
+      description: ""
+      disabled: false
+    - type: file
+      key: images[1]
+      src:
+        - /C:/Users/youco/Downloads/IMG_6445.png
+      description: ""
+      disabled: false
+    - type: file
+      key: ""
+      src: []
+      description: ""
+      disabled: true
+order: 1800

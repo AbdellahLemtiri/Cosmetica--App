@@ -9,20 +9,18 @@ class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
-
-    protected $fillable = [
-        'total_price',
-        'status','user_id',
-    ];
-
-  
+    protected $fillable = ['total_price', 'status', 'user_id'];
+    protected $table = 'orders';
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    public function items()
+    public function products()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsToMany(Product::class, 'order_products')->withPivot('quantity', 'unit_price')->withTimestamps();
+    }
+    public function isMine($user)
+    {
+        return $this->user_id === $user->id;
     }
 }

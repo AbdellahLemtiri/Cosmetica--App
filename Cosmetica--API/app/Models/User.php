@@ -3,18 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Testing\Fluent\Concerns\Has;
+use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
-class User extends Authenticatable implements JWTSubject 
+
+class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable,HasRoles;
-
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    protected $guard_name = 'api';
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +23,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
-        'password','role'
+        'password',
     ];
 
     /**
@@ -49,23 +49,34 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-
-  
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [
+            'email' => $this->email,
+            'name'  => $this->name,
+        ];
+    }
 
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
-
-    public function getJWTIdentifier()
+    public function isAdmin()
     {
-        return $this->getKey();
+        return $this->hasRole('admin');
     }
 
-    public function getJWTCustomClaims()
+    public function isClient()
     {
-        return [
-            'role' => $this->role,
-        ];
+        return $this->hasRole('client');
+    }
+
+    public function isWorker()
+    {
+        return $this->hasRole('worker');
     }
 }

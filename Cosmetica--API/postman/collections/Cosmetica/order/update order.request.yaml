@@ -1,0 +1,14 @@
+$kind: http-request
+name: update order
+url: http://127.0.0.1:8000/api/orders/2/status
+method: PATCH
+headers:
+  Authorization: "{{tokenJWT}}"
+body:
+  type: json
+  content: "{\r
+
+    \    \"status\" : \"processing\"\r
+
+    }"
+order: 3000

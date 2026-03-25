@@ -1,0 +1,7 @@
+$kind: http-request
+name: cancel order
+url: http://127.0.0.1:8000/api/orders/1/cancel
+method: POST
+headers:
+  Authorization: "{{tkenclient}}"
+order: 4772

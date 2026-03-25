@@ -2,30 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\DTOs\CategoryDTO;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use App\Services\CategoryService;
+use Exception;
 
 class CategoryController extends Controller
 {
+    public function __construct(
+        protected CategoryService $categoryService
+    ) {
+        // 
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-        return response()->json(Category::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $categories = $this->categoryService->listAllCategories();
+        return response()->json($categories);
     }
 
     /**
@@ -33,53 +29,46 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
-        Gate::authorize('create', Category::class);
-        $data = $request->validated();
-        $category = Category::create($data);
-        return response()->json(["message" => "Category created successfully", $category]);
+        $dto = CategoryDTO::fromRequest($request);
+        $category = $this->categoryService->storeCategory($dto);
+
+        return response()->json([
+            'message' => 'Category created successfully',
+            'data' => $category
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(int $id)
     {
-        // 
-        
+        $category = $this->categoryService->getCategoryDetails($id);
         return response()->json($category);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, int $id)
     {
-        //
-        Gate::authorize('update', Category::class);
-        $data = $request->validated();
-        $category->update($data);
-        $category->update($data);
-        return response()->json(["message" => "Category updated successfully", '$category' => $category],200);
-    }
+        $dto = CategoryDTO::fromRequest($request);
+        $this->categoryService->updateCategory($id, $dto);
 
+        return response()->json([
+            'message' => 'Category updated successfully'
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(int $id)
     {
-        //
-        Gate::authorize('update', Category::class);
-        $category->delete();
-        return response()->json(["message" => "Category deleted successfully"],200);
-         
+        try {
+            $this->categoryService->deleteCategory($id);
+            return response()->json(['message' => 'Category deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

@@ -1,0 +1,7 @@
+$kind: http-request
+name: delete
+url: http://127.0.0.1:8000/api/products/parfum-dior-sauvage-1
+method: DELETE
+headers:
+  Authorization: "{{tokenJWT}}"
+order: 6000

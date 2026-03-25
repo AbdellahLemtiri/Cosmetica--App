@@ -1,0 +1,5 @@
+$kind: http-request
+name: get stats
+url: http://127.0.0.1:8000/api/admin/stats
+method: GET
+order: 3815224182283397

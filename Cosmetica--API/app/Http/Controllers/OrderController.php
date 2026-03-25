@@ -2,83 +2,87 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\OrderDTO;
+use App\Http\Requests\OrderRequest;
 use App\Models\Order;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
-use Symfony\Component\HttpFoundation\Request;
-use App\Http\Requests\UpdateStatusOrder;
+use App\Services\OrderService;
+use Illuminate\Http\Request;
+
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-        return response()->json(Order::all());
+    public function __construct(
+        protected OrderService $orderService
+    ) {
+        // 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request)
+    public function store(OrderRequest $request)
     {
-        //
+        try {
+            $dto = OrderDTO::fromRequest($request);
+            $order = $this->orderService->placeOrder($dto);
 
-        $data = $request->validated()   ;
-        $order = Order::create($data);
-        return response()->json($order);
+            return response()->json([
+                'message' => 'Order created successfully',
+                'order' => $order
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
     }
-
-
-    public function UpdateStatus(UpdateStatusOrder $request, Order $order)
-    {
-        //
-        $status = $request->validated('status');
-        $order->status = $status;
-        return response()->json($order);        
-    }
-
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+
+    public function show(int $id)
     {
-        //
+        $order = $this->orderService->getOrderDetails($id);
+        return response()->json($order);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
+    public function myOrders()
     {
-        //
+        $orders = auth()->user()->orders()->with('products')->latest()->get();
+        return response()->json($orders);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function updateStatus(Request $request, int $id)
     {
-        //
-        $data = $request->validated()   ;
-        $order->update($data);
-        return response()->json($order);
+        if (!auth()->user()->hasAnyRole(['admin', 'employee'])) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,processing,completed,cancelled'
+        ]);
+
+        $order = $this->orderService->updateOrderStatus($id, $request->status);
+
+        return response()->json([
+            'message' => 'Order status updated successfully',
+            'order' => $order
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * cancel the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function cancel(int $id)
     {
-        //
+        try {
+            $userId = auth()->id();
+            $this->orderService->cancelOrder($id, $userId);
+
+            return response()->json(['message' => 'Order cancelled successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

@@ -2,60 +2,83 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ProductDTO;
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProductRequest;
+
+use App\Services\ProductService;
+use Exception;
 
 class ProductController extends Controller
 {
+    public function __construct(
+        protected ProductService $productService
+    ) {}
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        // n-jibo l-produits m3a tsawer dyalhom
-        return response()->json(Product::with('images')->get());
+        $products = $this->productService->getAllProducts();
+        return response()->json($products);
     }
-
-    public function store(StoreProductRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ProductRequest $request)
     {
-         if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            if (count($images) > 4) {
-                return response()->json([
-                    'message' => 'Limite de 4 images par produit dépassée'
-                ], 422);
-            }
+
+        try {
+            $dto = ProductDTO::fromRequest($request);
+            $product = $this->productService->createProduct($dto);
+
+            return response()->json([
+                'message' => 'Product created successfully',
+                'data' => $product
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
         }
+    }
 
-        $data = $request->validated();
-         $product = Product::create($data);
-
-         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                 $path = $image->store('images/products', 'public');
-               
-                $product->images()->create(['image_url' => $path]);
-            }
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $slug)
+    {
+        try {
+            $product = $this->productService->getProductBySlug($slug);
+            return response()->json($product);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'this product does not exist'], 404);
         }
- 
-        return response()->json($product->load('images'), 201);
     }
 
-    public function show(Product $product)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ProductRequest $request, string $slug)
     {
-         return response()->json($product->load('images'));
+
+        try {
+            $dto = ProductDTO::fromRequest($request);
+            $product = $this->productService->updateProduct($this->productService->getProductBySlug($slug)->id, $dto);
+
+            return response()->json([
+                'message' => 'Product updated successfully',
+                'data' => $product
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
     }
 
-    public function update(UpdateProductRequest $request, Product $product)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $slug)
     {
-        $data = $request->validated();
-        $product->update($data);
-        return response()->json($product);
-    }
-
-    public function destroy(Product $product)
-    { 
-        $product->delete();
-        return response()->json(['message' => 'Produit supprimé avec succès','product' => $product], 200);
+        $this->productService->deleteProduct($this->productService->getProductBySlug($slug)->id);
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 }

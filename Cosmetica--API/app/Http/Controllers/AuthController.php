@@ -2,50 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\DTOs\RegisterDTO;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisteRequest;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
+use App\Http\Requests\RegisterRequest;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    public function register(RegisteRequest $request)
-    {
+    public function __construct(
+        protected AuthService $authService
+    ) {
+        // 
+    }
 
-        $data = $request->validated();
-        $clientRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
-        $user = User::create($data);
-        $user->assignRole($clientRole) ;
-        $user->save();
-        $token = Auth::guard('api')->login($user);
+    public function register(RegisterRequest $request)
+    {
+        $dto = RegisterDTO::fromRequest($request);
+        $user = $this->authService->registerUser($dto);
+
         return response()->json([
-            'user' => $user,
-            'token' => $token
+            'message' => 'User registered successfully',
+            'user' => $user->load('roles'),
         ], 201);
     }
 
     public function login(LoginRequest $request)
     {
-        $data = $request->validated();
+        $token = $this->authService->login($request->validated());
 
-        if (! $token = Auth::guard('api')->attempt($data)) {
-            return response()->json(['error' => 'Email ou mot de passe incorrect'], 401);
+        if (!$token) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return response()->json([
-            'user' => Auth::guard('api')->user(),
-            'token' => $token
-        ], 200);
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
+    }
+
+    public function me()
+    {
+        return response()->json(auth()->user());
     }
 
     public function logout()
     {
-        Auth::guard('api')->logout();
-
-        return response()->json([
-            'message' => 'Déconnexion réussie'
-        ], 200);
+        auth('api')->logout();
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }

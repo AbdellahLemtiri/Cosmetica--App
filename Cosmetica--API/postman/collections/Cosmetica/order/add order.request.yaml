@@ -1,0 +1,32 @@
+$kind: http-request
+name: add order
+url: http://127.0.0.1:8000/api/orders
+method: POST
+headers:
+  Authorization: "{{tkenclient}}"
+body:
+  type: json
+  content: "{\r
+
+    \  \"items\": [\r
+
+    \    {\r
+
+    \      \"product_id\":4,\r
+
+    \      \"quantity\": 2\r
+
+    \    },\r
+
+    \    {\r
+
+    \      \"product_id\":5,\r
+
+    \      \"quantity\": 1\r
+
+    \    }\r
+
+    \  ]\r
+
+    }"
+order: 1000

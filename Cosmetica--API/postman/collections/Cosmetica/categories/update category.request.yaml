@@ -1,0 +1,17 @@
+$kind: http-request
+name: update category
+url: http://127.0.0.1:8000/api/categories/1
+method: PUT
+headers:
+  Authorization: "{{tokenJWT}}"
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"x\",\r
+
+    \    \"description\": \"Une large gamme de parfums de luxe pour hommes et
+    femmes.\"\r
+
+    }"
+order: 1956432358409888
