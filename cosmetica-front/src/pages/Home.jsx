@@ -10,6 +10,15 @@ const Home = () => {
     const fetchProduits = async () => {
       try {
         const response = await axios.get('/products');
+
+
+        const data = {
+          products: response.data.data,
+          categories: response.data.categories,
+          images: response.data.images,
+          stock : response.data.stock,
+          
+        }
         setProduits(response.data.data || response.data);
       } catch (error) {
         console.error("Erreur:", error);
@@ -46,7 +55,7 @@ const Home = () => {
                  <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200 h-64 relative">
                   {prod.images && prod.images.length > 0 ? (
                     <img 
-                      src={`http://localhost:8000/storage/${prod.images[0].path}`} 
+                      src={`http://127.0.0.1:8000/storage/${prod.images[0].path}`} 
                       alt={prod.name} 
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
