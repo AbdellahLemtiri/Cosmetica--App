@@ -29,6 +29,7 @@ class AuthService
     }
     public function login(array $dataLogin): ?string
     {
+        
         return auth('api')->attempt($dataLogin);
     }
 }
