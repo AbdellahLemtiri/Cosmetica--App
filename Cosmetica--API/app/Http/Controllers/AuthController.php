@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\RegisterDTO;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\auth\LoginResource;
 use App\Services\AuthService;
 
 class AuthController extends Controller
@@ -34,10 +35,13 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $user = auth('api')->user()->load('roles');
+
+
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'user' => $user,
+            'token' => $token, 
+            'message' => 'Successfully logged in'
         ]);
     }
 
