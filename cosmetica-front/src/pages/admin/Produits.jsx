@@ -31,12 +31,11 @@ const Produits = () => {
     fetchData();
   }, []);
 
-  // Mni l-admin kay-khtar tsawer
-  const handleImageChange = (e) => {
+   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 4) {
-      alert("⚠️ Limite de 4 images par produit dépassée !");
-      e.target.value = null; // Msse7 dakchi li khtar
+      alert(" Limite de 4 images par produit dépassée !");
+      e.target.value = null;  
       setImages([]);
     } else {
       setImages(files);
@@ -93,9 +92,11 @@ const Produits = () => {
         name: produit.name, 
         description: produit.description || '', 
         price: produit.price, 
-        category_id: produit.category_id 
+        category_id: produit.category_id,
+        stock: produit.stock
+
       });
-      setEditId(produit.id);
+      setEditId(produit.slug);
     } else {
       setFormData({ name: '', description: '', price: '', category_id: '',stock: '', images: [] });
       setEditId(null);
@@ -112,7 +113,7 @@ const Produits = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Gestion des Produits 📦</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Gestion des Produits </h2>
         <button onClick={() => openModal()} className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm">
           + Nouveau Produit
         </button>
@@ -140,7 +141,7 @@ const Produits = () => {
                     <td className="p-4 text-gray-900 font-bold">{prod.price} MAD</td>
                     <td className="p-4 text-right space-x-3">
                       <button onClick={() => openModal(prod)} className="text-blue-600 hover:text-blue-800 font-medium text-sm">Modifier</button>
-                      <button onClick={() => handleDelete(prod.id)} className="text-red-600 hover:text-red-800 font-medium text-sm">Supprimer</button>
+                      <button onClick={() => handleDelete(prod.slug)} className="text-red-600 hover:text-red-800 font-medium text-sm">Supprimer</button>
                     </td>
                   </tr>
                 ))

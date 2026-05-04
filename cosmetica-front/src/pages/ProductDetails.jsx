@@ -46,13 +46,13 @@ const ProductDetails = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Section Images */}
           <div className="flex flex-col space-y-4">
-            <div className="bg-gray-100 rounded-3xl overflow-hidden aspect-w-1 aspect-h-1 h-96">{produit.images && produit.images.length > 0 ? <img src={`http://localhost:8000/storage/${produit.images[mainImage].path}`} alt={produit.name} className="w-full h-full object-cover object-center" /> : <div className="w-full h-full flex items-center justify-center text-gray-400">Pas d'image</div>}</div>
+            <div className="bg-gray-100 rounded-3xl overflow-hidden aspect-w-1 aspect-h-1 h-96">{produit.images && produit.images.length > 0 ? <img src={`http://localhost:8000/storage/${produit.images[mainImage].url}`} alt={produit.name} className="w-full h-full object-cover object-center" /> : <div className="w-full h-full flex items-center justify-center text-gray-400">Pas d'image</div>}</div>
 
             {produit.images && produit.images.length > 1 && (
               <div className="grid grid-cols-4 gap-4">
                 {produit.images.map((img, idx) => (
                   <button key={img.id} onClick={() => setMainImage(idx)} className={`rounded-xl overflow-hidden h-24 border-2 transition-all ${mainImage === idx ? 'border-rose-600' : 'border-transparent'}`}>
-                    <img src={`http://localhost:8000/storage/${img.path}`} className="w-full h-full object-cover" alt="" />
+                    <img src={`http://127.0.0.1:8000/storage/${img.url}`} className="w-full h-full object-cover" alt="" />
                   </button>
                 ))}
               </div>
@@ -80,7 +80,7 @@ const ProductDetails = () => {
                 </button>
               </div>
               <button onClick={handleAddToCart} className="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-rose-200 transition-all">
-                Ajouter au panier 🧺
+                Ajouter au panier 
               </button>
             </div>
           </div>

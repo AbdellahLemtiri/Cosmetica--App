@@ -12,8 +12,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  // Ajouter au panier
-  const addToCart = (product, quantity) => {
+   const addToCart = (product, quantity) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.product.id === product.id);
       if (existingItem) {

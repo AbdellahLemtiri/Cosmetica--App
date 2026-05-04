@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
+  import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import axios from '../api/axios';
 
@@ -21,17 +21,16 @@ const Panier = () => {
 
     setLoading(true);
     try {
-      // Kan-gadou l-format li ghadi y-fhem Laravel (Tableau dyal les IDs w Quantités)
-      const orderItems = cart.map(item => ({
-        product_slug: item.product.slug, // Kima mtloub f le brief: "choisissant des produits par leurs slugs"
+       const orderItems = cart.map(item => ({
+        product_id: item.product.id, 
         quantity: item.quantity
       }));
 
       await axios.post('/orders', { items: orderItems });
       
-      alert("Commande passée avec succès ! 🎉");
+      alert("Commande passée avec succès ! ");
       clearCart();
-      navigate('/mes-commandes'); // Page ghadi n-gaddouha mn b3d
+      navigate('/mes-commandes');  
     } catch (error) {
       console.error("Erreur lors de la commande", error);
       alert("Une erreur s'est produite.");
@@ -63,7 +62,7 @@ const Panier = () => {
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                     {item.product.images && item.product.images[0] ? (
-                      <img src={`http://localhost:8000/storage/${item.product.images[0].path}`} alt={item.product.name} className="w-full h-full object-cover" />
+                      <img src={`http://127.0.0.1:8000/storage/${item.product.images[0].url}`} alt={item.product.name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-rose-50"></div>
                     )}

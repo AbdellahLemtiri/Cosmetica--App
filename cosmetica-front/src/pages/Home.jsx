@@ -10,8 +10,6 @@ const Home = () => {
     const fetchProduits = async () => {
       try {
         const response = await axios.get('/products');
-
-
         const data = {
           products: response.data.data,
           categories: response.data.categories,
@@ -33,8 +31,7 @@ const Home = () => {
     <div className="min-h-screen bg-gray-50 pt-8 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header Section */}
-        <div className="text-center mb-12">
+         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
             Découvrez <span className="text-rose-600">La Cosmetica</span>
           </h1>
@@ -55,7 +52,7 @@ const Home = () => {
                  <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200 h-64 relative">
                   {prod.images && prod.images.length > 0 ? (
                     <img 
-                      src={`http://127.0.0.1:8000/storage/${prod.images[0].path}`} 
+                      src={`http://127.0.0.1:8000/storage/${prod.images[0].url}`} 
                       alt={prod.name} 
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />

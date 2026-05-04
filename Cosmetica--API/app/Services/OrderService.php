@@ -22,9 +22,7 @@ class OrderService
     {
         try {
             $order = $this->orderDAO->create($dto);
-
             Log::info("Order created successfully: " . $order->id);
-
             return $order;
         } catch (Exception $e) {
             throw new Exception("Failed to create order: " . $e->getMessage());

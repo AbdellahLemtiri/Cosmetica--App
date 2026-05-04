@@ -38,6 +38,11 @@ class OrderController extends Controller
      * Display the specified resource.
      */
 
+    public function index()
+    {
+        $orders = Order::with('products')->latest()->get(); ;
+        return response()->json($orders);
+    }
     public function show(int $id)
     {
         $order = $this->orderService->getOrderDetails($id);

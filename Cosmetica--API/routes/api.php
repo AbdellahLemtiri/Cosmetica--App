@@ -26,7 +26,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('orders', [OrderController::class, 'store']);
     Route::get('orders', [OrderController::class, 'myOrders']);
-    // Route::get('orders/{id}', [OrderController::class, 'show']);
+
+    Route::get('orders/{id}', [OrderController::class, 'show']);
     Route::post('orders/{id}/cancel', [OrderController::class, 'cancel']);
     Route::middleware('role:worker|admin')->group(function () {
         Route::patch('orders/{id}/status', [OrderController::class, 'updateStatus']);
@@ -40,6 +41,7 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('products', [ProductController::class, 'store']);
         Route::put('products/{id}', [ProductController::class, 'update']);
-        Route::delete('products/{id}', [ProductController::class, 'destroy']);
+        Route::delete('products/{product}', [ProductController::class, 'destroy']);
+        Route::get('orders', [OrderController::class, 'index']);
     });
 });

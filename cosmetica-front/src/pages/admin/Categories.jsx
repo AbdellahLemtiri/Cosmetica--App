@@ -15,7 +15,7 @@ const Categories = () => {
        setCategories(response.data.data || response.data); 
     } catch (error) {
       console.error("Erreur lors de la récupération :", error);
-    } finally {
+    }finally {
       setLoading(false);
     }
   };
@@ -71,7 +71,7 @@ const Categories = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Gestion des Catégories 🏷️</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Gestion des Catégories </h2>
         <button 
           onClick={() => openModal()}
           className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm"

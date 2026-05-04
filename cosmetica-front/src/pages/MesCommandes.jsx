@@ -8,7 +8,7 @@ const MesCommandes = () => {
 
   const fetchCommandes = async () => {
     try {
-      const response = await axios.get('/orders'); // Laravel khasso y-rje3 ghir l-commandes dyal had l-user
+      const response = await axios.get('/orders');  
       setCommandes(response.data.data || response.data);
     } catch (error) {
       console.error("Erreur:", error);
@@ -24,8 +24,8 @@ const MesCommandes = () => {
   const handleCancel = async (id) => {
     if (window.confirm("Voulez-vous vraiment annuler cette commande ?")) {
       try {
-        await axios.put(`/orders/${id}/cancel`); // API bach t-annuler
-        fetchCommandes(); // N-actualisiw l-liste
+        await axios.put(`/orders/${id}/cancel`);  
+        fetchCommandes();  
       } catch (error) {
         console.error("Erreur d'annulation:", error);
         alert("Impossible d'annuler cette commande.");
@@ -33,8 +33,7 @@ const MesCommandes = () => {
     }
   };
 
-  // Fonction sghira bach n-3tiw couleur l-kola état (Status)
-  const getStatusBadge = (status) => {
+   const getStatusBadge = (status) => {
     switch (status) {
       case 'en attente': return <span className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold">En attente ⏳</span>;
       case 'en préparation': return <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-bold">En préparation 📦</span>;
@@ -47,7 +46,7 @@ const MesCommandes = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-5xl mx-auto px-4">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Mes Commandes 📦</h1>
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Mes Commandes </h1>
 
         {loading ? (
           <div className="text-center text-gray-500 py-10">Chargement de vos commandes...</div>
@@ -74,8 +73,7 @@ const MesCommandes = () => {
                 <div className="p-4 flex justify-between items-center bg-white">
                   <p className="text-sm text-gray-600">{cmd.items_count || 0} article(s) dans cette commande</p>
                   
-                  {/* L-Client y-9der y-annuler ghir ila kant en attente */}
-                  {cmd.status === 'en attente' && (
+                   {cmd.status === 'en attente' && (
                     <button 
                       onClick={() => handleCancel(cmd.id)}
                       className="text-red-600 hover:text-red-800 text-sm font-bold bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg transition-colors"
